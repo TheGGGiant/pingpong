@@ -1,0 +1,22 @@
+~~~ Note per la stesura della relazione finale ~~~
+Abbiamo iniziato dal main
+Dopo aver guardato il codice, abbiamo cercato nel manuale addrinfo e abbiamo trovato un esempio con lo stesso memset usato da Chiola
+Quindi abbiamo compilato la struct secondo le nostre necessità
+Poi abbiamo cercato nel manuale getaddrinfo (che è la stessa pagina che abbiamo usato prima) e abbiamo scoperto che vuole 4 argomenti:
+        -stringa col nome simbolico del server da contattare
+        -stringa col numero della porta da contattare
+        -struct *addrinfo per specificare come vogliamo il risultato (IPV4 o IPV6, SOCK_STREAM o SOCK_DGRAM)
+        -struct **addrinfo per il risultato
+In seguito abbiamo creato il socket come da specifica (ipv4,socket tipo stream, nessun flag) e poi lo abbiamo usato per connetterci, facendo un cast ad una struct sockaddr*
+dei risultati ottenuti dalla ricerca (espressa in struct *sockaddr_in)
+A questo punto abbiamo compilato per la prima volta (ndr. ho così tanta sicurezza nel mio codice che ho aspettato fino a questo punto), dopo aver ottenuto con cmake tutti
+i programmi bash che il Prof ci ha fornito. E poco sorprendentemente, non ha funzionato tutto alla prima, ma ce ne siamo accorti dopo
+Abbiamo verificato che la risoluzione del nome simbolico fosse corretta, utilizzando sia ping che traceroute su siti con un unico server (p.e. 'www.unige.it')
+Abbiamo implementato la send, però ci siamo accorti che la connect non funzionava, in quanto come parametro veniva passata la dimensione del puntatore ad una struct,
+non la dimensione della struct stessa.
+Risolto questo piccolo intoppo, ci siamo dedicati al controllo della risposta in arrivo:
+        prima avevamo implementato un controllo basato sui byte inviati e ricevuti, ma ci siamo accorti che l'approccio fosse sbagliato,
+        quindi abbiamo fatto il confronto letterale attraverso la funzione strcmp() secondo le specifiche disponibili su AulaWeb 
+        (messaggio di risposta = "OK\n")
+Infine, abbiamo commentato i nostri passaggi, aggiunto controlli su getaddrinfo(), socket(), connect() e finito l'implementazione del caso in cui la risposta ricevuta
+non fosse quella desiderata
